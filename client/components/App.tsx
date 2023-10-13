@@ -1,35 +1,62 @@
-import { useState, useEffect } from 'react'
-import { getGreeting } from '../apiClient.ts'
+import { useState } from 'react'
 
-const App = () => {
-  const [greeting, setGreeting] = useState('')
-  const [count, setCount] = useState(0)
-  const [isError, setIsError] = useState(false)
+function App() {
+  const [arr1, setArr1] = useState([1, 2, 3, 4])
+  const [arr2, setArr2] = useState<number[]>([])
+  const [temp, setTemp] = useState<number[]>([])
+  const toggleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    item: number
+  ) => {
+    if (e.target.checked && !temp.includes(item)) {
+      setTemp([...temp, item])
+    } else {
+      const index = temp.indexOf(item)
+      setTemp([...temp].filter((i) => i !== item))
+    }
+  }
 
-  useEffect(() => {
-    getGreeting()
-      .then((greeting) => {
-        console.log(greeting)
-        setGreeting(greeting)
-        setIsError(false)
-      })
-      .catch((err) => {
-        console.log(err)
-        setIsError(true)
-      })
-  }, [count])
-
+  const handleMoveRight = () => {
+    setArr1([...arr1].filter((item) => !temp.includes(item)))
+    setArr2([...arr2, ...temp])
+    setTemp([])
+  }
+  const handleMoveLeft = () => {
+    setArr2([...arr2].filter((item) => !temp.includes(item)))
+    setArr1([...arr1, ...temp])
+    setTemp([])
+  }
   return (
-    <>
-      {count}
-      <h1>{greeting}</h1>
-      {isError && (
-        <p style={{ color: 'red' }}>
-          There was an error retrieving the greeting.
-        </p>
-      )}
-      <button onClick={() => setCount(count + 1)}>Click</button>
-    </>
+    <div className="main">
+      <div className="left-box">
+        {arr1.sort().map((item) => (
+          <div key={item}>
+            <input
+              type="checkbox"
+              name="checkedbox"
+              onChange={(e) => toggleChange(e, item)}
+            />
+            <label>{item}</label>
+          </div>
+        ))}
+      </div>
+      <div className="move-button">
+        <button onClick={handleMoveRight}>&#62;</button>
+        <button onClick={handleMoveLeft}>&#60;</button>
+      </div>
+      <div className="right-box">
+        {arr2.sort().map((item) => (
+          <div key={item}>
+            <input
+              type="checkbox"
+              name="checkedbox"
+              onChange={(e) => toggleChange(e, item)}
+            />
+            <label> {item} </label>
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }
 
