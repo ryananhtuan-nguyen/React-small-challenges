@@ -10,22 +10,22 @@ function App() {
   ) => {
     if (e.target.checked && !temp.includes(item)) {
       setTemp([...temp, item])
-    } else {
-      const index = temp.indexOf(item)
+    } else if (!e.target.checked) {
       setTemp([...temp].filter((i) => i !== item))
     }
   }
 
   const handleMoveRight = () => {
     setArr1([...arr1].filter((item) => !temp.includes(item)))
-    setArr2([...arr2, ...temp])
-    setTemp([])
+    setArr2([...arr2, ...temp.filter((item) => !arr2.includes(item))])
+    if (arr2.filter((item) => temp.includes(item)).length == 0) setTemp([])
   }
   const handleMoveLeft = () => {
     setArr2([...arr2].filter((item) => !temp.includes(item)))
-    setArr1([...arr1, ...temp])
-    setTemp([])
+    setArr1([...arr1, ...temp.filter((item) => !arr1.includes(item))])
+    if (arr1.filter((item) => temp.includes(item)).length == 0) setTemp([])
   }
+  const handleExchange = () => {}
   return (
     <div className="main">
       <div className="left-box">
@@ -43,6 +43,7 @@ function App() {
       <div className="move-button">
         <button onClick={handleMoveRight}>&#62;</button>
         <button onClick={handleMoveLeft}>&#60;</button>
+        <button onClick={handleExchange}>&#60;&#62;</button>
       </div>
       <div className="right-box">
         {arr2.sort().map((item) => (
