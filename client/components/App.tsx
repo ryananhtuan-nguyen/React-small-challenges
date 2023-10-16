@@ -5,6 +5,8 @@ function App() {
   const [arr2, setArr2] = useState<number[]>([])
   const [tempLeft, setTempLeft] = useState<number[]>([])
   const [tempRight, setTempRight] = useState<number[]>([])
+  console.log('left', tempLeft, 'right', tempRight)
+
   const toggleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     item: number,
