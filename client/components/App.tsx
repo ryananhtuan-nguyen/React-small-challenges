@@ -7,12 +7,28 @@ function App() {
   const [tempRight, setTempRight] = useState<number[]>([])
   const toggleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    item: number
+    item: number,
+    side: string
   ) => {
-    if (e.target.checked && !tempLeft.includes(item)) {
-      setTempLeft([...tempLeft, item])
-    } else if (!e.target.checked) {
-      setTempLeft([...tempLeft].filter((i) => i !== item))
+    switch (side) {
+      case 'left':
+        {
+          if (e.target.checked && !tempLeft.includes(item)) {
+            setTempLeft([...tempLeft, item])
+          } else if (!e.target.checked) {
+            setTempLeft([...tempLeft].filter((i) => i !== item))
+          }
+        }
+        break
+      case 'right':
+        {
+          if (e.target.checked && !tempRight.includes(item)) {
+            setTempRight([...tempRight, item])
+          } else if (!e.target.checked) {
+            setTempRight([...tempRight].filter((i) => i !== item))
+          }
+        }
+        break
     }
   }
 
@@ -23,10 +39,10 @@ function App() {
       setTempLeft([])
   }
   const handleMoveLeft = () => {
-    setArr2([...arr2].filter((item) => !tempLeft.includes(item)))
-    setArr1([...arr1, ...tempLeft.filter((item) => !arr1.includes(item))])
-    if (arr1.filter((item) => tempLeft.includes(item)).length == 0)
-      setTempLeft([])
+    setArr2([...arr2].filter((item) => !tempRight.includes(item)))
+    setArr1([...arr1, ...tempRight.filter((item) => !arr1.includes(item))])
+    if (arr1.filter((item) => tempRight.includes(item)).length == 0)
+      setTempRight([])
   }
   const handleExchange = () => {}
   return (
@@ -37,7 +53,7 @@ function App() {
             <input
               type="checkbox"
               name="checkedbox"
-              onChange={(e) => toggleChange(e, item)}
+              onChange={(e) => toggleChange(e, item, 'left')}
             />
             <label>{item}</label>
           </div>
@@ -54,7 +70,7 @@ function App() {
             <input
               type="checkbox"
               name="checkedbox"
-              onChange={(e) => toggleChange(e, item)}
+              onChange={(e) => toggleChange(e, item, 'right')}
             />
             <label> {item} </label>
           </div>
